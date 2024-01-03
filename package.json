@@ -48,6 +48,10 @@
       "postcss-import": {}
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/your-chess-game"
+  },
   "devDependencies": {
     "@babel/core": "^7.23.0",
     "@babel/preset-env": "^7.22.20",
