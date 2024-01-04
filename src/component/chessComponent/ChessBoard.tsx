@@ -5,8 +5,9 @@ interface ChessBoardProps {
     boardSide?: "w" | "b";
     setBoardData: string[][];
     getBoardData: (data: string[][]) => void;
+    history?: (data: string[][][]) => void;
 }
-const ChessBoard: React.FC<ChessBoardProps> = ({ boardSide = "w", setBoardData = [
+const chessboardinit = [
     ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
     ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
     ['', '', '', '', '', '', '', ''],
@@ -15,7 +16,14 @@ const ChessBoard: React.FC<ChessBoardProps> = ({ boardSide = "w", setBoardData =
     ['', '', '', '', '', '', '', ''],
     ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
     ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
-], getBoardData = (data: string[][]) => { } }) => {
+]
+const ChessBoard: React.FC<ChessBoardProps> = ({
+    boardSide = "w",
+    setBoardData = chessboardinit,
+    getBoardData = (data: string[][]) => { },
+    history = (data: string[][][]) => { }
+}) => {
+    const moveshistory = useRef<string[][][]>([]);
     const [clickCount, setClickCount] = useState<number>(1);
     const [selectedPos, setSelectedPos] = useState<[string, number, number]>(["", -1, -1]);
     const [starting, setStarting] = useState<String>("")
@@ -66,7 +74,9 @@ const ChessBoard: React.FC<ChessBoardProps> = ({ boardSide = "w", setBoardData =
                 oldBoard[i][j] = selectedPos[0]
                 return oldBoard
             })
-            getBoardData(board)
+            moveshistory.current.push(JSON.parse(JSON.stringify(board)))
+            getBoardData(board);
+            history(moveshistory.current);
         }
         setSelectedPos(["", -1, -1])
         validPosList.current = new Map(resetPostion.current)
@@ -76,11 +86,13 @@ const ChessBoard: React.FC<ChessBoardProps> = ({ boardSide = "w", setBoardData =
         let enemylist = data in black ? white : black;
         if (data === "p" || data === "P") {
             if (data === "P") {
-                if (i === 6 && validPosList.current.has(`${i - 2}${j}`)) {
-                    validPosList.current.set(`${i - 2}${j}`, board[i - 2][j] === "")
-                }
                 if (validPosList.current.has(`${i - 1}${j}`)) {
                     validPosList.current.set(`${i - 1}${j}`, board[i - 1][j] === "")
+                }
+                if (i === 6 && validPosList.current.has(`${i - 2}${j}`)) {
+                    if (validPosList.current.get(`${i - 1}${j}`)) {
+                        validPosList.current.set(`${i - 2}${j}`, board[i - 2][j] === "")
+                    }
                 }
                 if (validPosList.current.has(`${i - 1}${j - 1}`)) {
                     validPosList.current.set(`${i - 1}${j - 1}`, board[i - 1][j - 1] in enemylist)
@@ -91,11 +103,13 @@ const ChessBoard: React.FC<ChessBoardProps> = ({ boardSide = "w", setBoardData =
                     underAttack.current.set(`${i - 1}${j + 1}`, board[i - 1][j + 1] in enemylist)
                 }
             } else {
-                if (i === 1 && validPosList.current.has(`${i + 2}${j}`)) {
-                    validPosList.current.set(`${i + 2}${j}`, board[i + 2][j] === "")
-                }
                 if (validPosList.current.has(`${i + 1}${j}`)) {
                     validPosList.current.set(`${i + 1}${j}`, board[i + 1][j] === "")
+                }
+                if (i === 1 && validPosList.current.has(`${i + 2}${j}`)) {
+                    if (validPosList.current.get(`${i + 1}${j}`)) {
+                        validPosList.current.set(`${i + 2}${j}`, board[i + 2][j] === "")
+                    }
                 }
                 if (validPosList.current.has(`${i + 1}${j - 1}`)) {
                     validPosList.current.set(`${i + 1}${j - 1}`, board[i + 1][j - 1] in enemylist)

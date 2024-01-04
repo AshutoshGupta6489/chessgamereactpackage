@@ -19,7 +19,7 @@
     "component",
     ""
   ],
-  "author": "Ashutosh",
+  "author": "Ashutosh Gupta <ashutoshgupta6480@gmail.com>",
   "license": "MIT",
   "babel": {
     "sourceType": "unambiguous",

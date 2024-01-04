@@ -26,6 +26,9 @@ const App = () => {
   const getData = (updatedData) => {
     console.log('Updated Board Data:', updatedData);
   };
+  const getHistory = (updatedData) => {
+    console.log('Updated Board Data:', updatedData);
+  };
 
   return (
     <ChessBoard
@@ -33,6 +36,9 @@ const App = () => {
       setBoardData={data}
       getBoardData={(data) => {
         getData(data);
+      }}
+      history={(data) => {
+        getHistory(data);
       }}
     />
   );
@@ -46,6 +52,7 @@ export default App;
 - **Piece Movement Validation**: The component validates legal moves based on the rules of chess.
 - **Visual Feedback**: Highlights selected pieces and valid move positions.
 - **Support for White and Black Side**: Specify whether the board should start with the white or black side facing the user.
+- **History**: history support
 
 ## Usage
 
